@@ -8,7 +8,7 @@
     <meta name="author" content="iastoreca" >
 
     <!-- Le styles -->
-    <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -81,7 +81,7 @@
       
     </style>
     
-    <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -283,18 +283,6 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://twitter.github.io/bootstrap/assets/js/jquery.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-transition.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-alert.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-modal.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-dropdown.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-scrollspy.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-tab.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-tooltip.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-popover.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-button.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-collapse.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-carousel.js"></script>
-    <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-typeahead.js"></script>
-
+    <script src="js/bootstrap.min.js"></script>    
   </body>
 </html>
