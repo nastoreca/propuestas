@@ -15,3 +15,8 @@ Route::get('/', function()
 {
 	return View::make('propuestas');
 });
+
+Route::get('/1', function()
+{
+	return View::make('hello');
+});
