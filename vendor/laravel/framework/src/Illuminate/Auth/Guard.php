@@ -96,7 +96,7 @@ class Guard {
 	 */
 	public function guest()
 	{
-		return is_null($this->user());
+		return ! $this->check();
 	}
 
 	/**
@@ -201,7 +201,6 @@ class Guard {
 		// request indicating that the given credentials were invalid for login.
 		if ($this->attemptBasic($request, $field)) return;
 
-		
 		return $this->getBasicResponse();
 	}
 
@@ -365,7 +364,20 @@ class Guard {
 	{
 		$this->session->put($this->getName(), $id);
 
-		return $this->login($this->user(), $remember);
+		return $this->login($this->provider->retrieveById($id), $remember);
+	}
+
+	/**
+	 * Log the given user ID into the application without sessions or cookies.
+	 *
+	 * @param  mixed  $id
+	 * @return bool
+	 */
+	public function onceUsingId($id)
+	{
+		$this->setUser($this->provider->retrieveById($id));
+
+		return $this->user instanceof UserInterface;
 	}
 
 	/**
@@ -386,13 +398,21 @@ class Guard {
 	 */
 	public function logout()
 	{
+		$user = $this->user();
+
+		// If we have an event dispatcher instance, we can fire off the logout event
+		// so any further processing can be done. This allows the developer to be
+		// listening for anytime a user signs out of this application manually.
 		$this->clearUserDataFromStorage();
 
 		if (isset($this->events))
 		{
-			$this->events->fire('auth.logout', array($this->user));
+			$this->events->fire('auth.logout', array($user));
 		}
 
+		// Once we have fired the logout event we will clear the users out of memory
+		// so they are no longer available as the user is no longer considered as
+		// being signed into this application and should not be available here.
 		$this->user = null;
 
 		$this->loggedOut = true;

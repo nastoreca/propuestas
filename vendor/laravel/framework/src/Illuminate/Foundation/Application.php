@@ -18,8 +18,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Debug\Exception\FatalErrorException;
 use Illuminate\Support\Contracts\ResponsePreparerInterface;
-use Symfony\Component\HttpKernel\Exception\FatalErrorException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -32,7 +32,7 @@ class Application extends Container implements HttpKernelInterface, ResponsePrep
 	 *
 	 * @var string
 	 */
-	const VERSION = '4.0.4';
+	const VERSION = '4.0.8';
 
 	/**
 	 * Indicates if the application has "booted".
@@ -84,6 +84,13 @@ class Application extends Container implements HttpKernelInterface, ResponsePrep
 	protected $deferredServices = array();
 
 	/**
+	 * The request class used by the application.
+	 *
+	 * @var string
+	 */
+	protected static $requestClass = 'Illuminate\Http\Request';
+
+	/**
 	 * Create a new Illuminate application instance.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
@@ -111,7 +118,7 @@ class Application extends Container implements HttpKernelInterface, ResponsePrep
 	 */
 	protected function createRequest(Request $request = null)
 	{
-		return $request ?: Request::createFromGlobals();
+		return $request ?: static::onRequest('createFromGlobals');
 	}
 
 	/**
@@ -123,7 +130,9 @@ class Application extends Container implements HttpKernelInterface, ResponsePrep
 	{
 		$url = $this['config']->get('app.url', 'http://localhost');
 
-		$this->instance('request', Request::create($url, 'GET', array(), array(), array(), $_SERVER));
+		$parameters = array($url, 'GET', array(), array(), array(), $_SERVER);
+
+		$this->instance('request', static::onRequest('create', $parameters));
 	}
 
 	/**
@@ -515,12 +524,10 @@ class Application extends Container implements HttpKernelInterface, ResponsePrep
 		{
 			$response = $this['events']->until('illuminate.app.down');
 
-			return $this->prepareResponse($response, $request);
+			if ( ! is_null($response)) return $this->prepareResponse($response, $request);
 		}
-		else
-		{
-			return $this['router']->dispatch($this->prepareRequest($request));
-		}
+		
+		return $this['router']->dispatch($this->prepareRequest($request));
 	}
 
 	/**
@@ -614,9 +621,9 @@ class Application extends Container implements HttpKernelInterface, ResponsePrep
 	 */
 	public function prepareRequest(Request $request)
 	{
-		if (isset($this['session']))
+		if (isset($this['session.store']))
 		{
-			$request->setSessionStore($this['session']);
+			$request->setSessionStore($this['session.store']);
 		}
 
 		return $request;
@@ -749,6 +756,16 @@ class Application extends Container implements HttpKernelInterface, ResponsePrep
 	}
 
 	/**
+	 * Get the current application locale.
+	 *
+	 * @return string
+	 */
+	public function getLocale()
+	{
+		return $this['config']->get('app.locale');
+	}
+
+	/**
 	 * Set the current application locale.
 	 *
 	 * @param  string  $locale
@@ -782,6 +799,31 @@ class Application extends Container implements HttpKernelInterface, ResponsePrep
 	public function setDeferredServices(array $services)
 	{
 		$this->deferredServices = $services;
+	}
+
+	/**
+	 * Get or set the request class for the application.
+	 *
+	 * @param  string  $class
+	 * @return string
+	 */
+	public static function requestClass($class = null)
+	{
+		if ( ! is_null($class)) static::$requestClass = $class;
+
+		return static::$requestClass;
+	}
+
+	/**
+	 * Call a method on the default request class.
+	 *
+	 * @param  string  $method
+	 * @param  array  $parameters
+	 * @return mixed
+	 */
+	public static function onRequest($method, $parameters = array())
+	{
+		return forward_static_call_array(array(static::requestClass(), $method), $parameters);
 	}
 
 	/**

@@ -26,8 +26,9 @@ return array(
     'PHPParser' => array($vendorDir . '/nikic/php-parser/lib'),
     'Normalizer' => array($vendorDir . '/patchwork/utf8/class'),
     'Monolog' => array($vendorDir . '/monolog/monolog/src'),
+    'Jeremeamia\\SuperClosure' => array($vendorDir . '/jeremeamia/SuperClosure/src'),
     'Illuminate' => array($vendorDir . '/laravel/framework/src'),
-    'Doctrine\\DBAL' => array($vendorDir . '/doctrine/dbal/lib'),
+    'Doctrine\\DBAL\\' => array($vendorDir . '/doctrine/dbal/lib'),
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
     'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
@@ -35,5 +36,5 @@ return array(
     'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib'),
     'Doctrine\\Common\\' => array($vendorDir . '/doctrine/common/lib'),
     'ClassPreloader' => array($vendorDir . '/classpreloader/classpreloader/src'),
-    'Carbon' => array($vendorDir . '/nesbot/carbon'),
+    'Carbon' => array($vendorDir . '/nesbot/carbon/src'),
 );

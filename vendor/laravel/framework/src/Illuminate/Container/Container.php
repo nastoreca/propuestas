@@ -1,4 +1,9 @@
-<?php namespace Illuminate\Container; use Closure, ArrayAccess, ReflectionParameter;
+<?php namespace Illuminate\Container;
+
+use Closure;
+use ArrayAccess;
+use ReflectionClass;
+use ReflectionParameter;
 
 class BindingResolutionException extends \Exception {}
 
@@ -225,7 +230,7 @@ class Container implements ArrayAccess {
 		// so the developer can keep using the same objects instance every time.
 		if (isset($this->instances[$abstract]))
 		{
-			return $this->instances[$abstract];	
+			return $this->instances[$abstract];
 		}
 
 		$concrete = $this->getConcrete($abstract);
@@ -293,7 +298,7 @@ class Container implements ArrayAccess {
 			return $concrete($this, $parameters);
 		}
 
-		$reflector = new \ReflectionClass($concrete);
+		$reflector = new ReflectionClass($concrete);
 
 		// If the type is not instantiable, the developer is attempting to resolve
 		// an abstract type such as an Interface of Abstract Class and there is
@@ -348,7 +353,7 @@ class Container implements ArrayAccess {
 			}
 			else
 			{
-				$dependencies[] = $this->make($dependency->name);
+				$dependencies[] = $this->resolveClass($parameter);
 			}
 		}
 
@@ -372,6 +377,35 @@ class Container implements ArrayAccess {
 			$message = "Unresolvable dependency resolving [$parameter].";
 
 			throw new BindingResolutionException($message);
+		}
+	}
+
+	/**
+	 * Resolve a class based dependency from the container.
+	 *
+	 * @param  \ReflectionParameter  $parameter
+	 * @return mixed
+	 */
+	protected function resolveClass(ReflectionParameter $parameter)
+	{
+		try
+		{
+			return $this->make($parameter->getClass()->name);
+		}
+
+		// If we can not resolve the class instance, we will check to see if the value
+		// is optional, and if it is we will return the optional parameter value as
+		// the value of the dependency, similarly to how we do this with scalars.
+		catch (BindingResolutionException $e)
+		{
+			if ($parameter->isOptional())
+			{
+				return $parameter->getDefaultValue();
+			}
+			else
+			{
+				throw $e;
+			}
 		}
 	}
 
@@ -500,6 +534,8 @@ class Container implements ArrayAccess {
 	public function offsetUnset($key)
 	{
 		unset($this->bindings[$key]);
+
+		unset($this->instances[$key]);
 	}
 
 }
