@@ -13,15 +13,10 @@ class CreateInvitadoPromotorTable extends Migration {
 	{
 		Schema::create('invitado_promotor',function($table){
 
-			$table->increments('id');
-
 			$table->integer('id_promotor')->unsigned();
 			$table->integer('id_invitado')->unsigned();
 			
-			$table->timestamps();
-
-			$table->index('id_promotor');
-			$table->index('id_invitado');
+			$table->primary(array('id_promotor', 'id_invitado'));
 
 			$table->foreign('id_promotor')
 			      ->references('id')->on('promotores')
