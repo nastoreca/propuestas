@@ -7,12 +7,12 @@ class Opcion extends Eloquent
 	
 	public function invitados(argument)
 	{
-		return $this->has_many_and_belongs_to('Invitado');
+		return $this->belongsToMany('Invitado', 'invitado_opcion', 'id_opcion', 'id_invitado');
 	}
 
 	public function propuesta()
 	{
-		return $this->belongs_to('Propuesta');
+		return $this->belongsTo('Propuesta');
 	}
 
 }

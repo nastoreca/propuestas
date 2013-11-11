@@ -6,11 +6,11 @@ class Promotor extends Eloquent
 
 	public function invitados()
 	{
-		return $this->has_many_and_belongs_to('Invitado');
+		return $this->belongsToMany('Invitado', 'invitado_promotor','id_promotor', 'id_invitado');
 	}
 
 	public function propuestas()
 	{
-		return $this->has_many('Propuesta')
+		return $this->hasMany('Propuesta')
 	}
 }

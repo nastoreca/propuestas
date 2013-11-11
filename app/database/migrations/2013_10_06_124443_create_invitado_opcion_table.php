@@ -13,11 +13,11 @@ class CreateInvitadoOpcionTable extends Migration {
 	{
 		Schema::create('invitado_opcion',function($table){
 
-			$table->integer('id_invitado')->unsigned();
-			$table->integer('id_opcion')->unsigned();
-			
-            $table->primary(array('id_invitado', 'id_opcion'));
+			$table->increments('id');
 
+			$table->integer('id_invitado')->unsigned()->index();
+			$table->integer('id_opcion')->unsigned()->index();
+			
 			$table->foreign('id_invitado')
 			      ->references('id')->on('invitados')
 			      ->onDelete('cascade')

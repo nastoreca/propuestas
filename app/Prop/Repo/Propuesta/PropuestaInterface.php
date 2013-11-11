@@ -1,14 +1,14 @@
-<?php namespace Prop\Repo;
+<?php namespace Prop\Repo\Propuesta;
 
 interface PropuestaInterface {
 
     /**
      * Crea una nueva propuesta 
      *
-     * @param  object $propuesta Objeto contenedor de los datos de la propuesta a crear
-     * @return boolean           indica si se ha realizado o no el metodo 
+     * @param  array $data  Contenedor de los datos de la propuesta a crear
+     * @return boolean      indica si se ha realizado o no el metodo 
      */
-    public function create(object $propuesta);
+    public function create(array $data);
 
     /**
      * Obtiene una propuesta por id 
@@ -16,7 +16,7 @@ interface PropuestaInterface {
      * @param  int $id  identificador de la propuesta
      * @return object   Objeto contenedor de los datos de la propuesta consultada
      */
-    public function porId(int $id);
+    public function porId($id);
 
     /**
      * Vota por una opcion propuesta
@@ -25,7 +25,7 @@ interface PropuestaInterface {
      * @param  int $idOpcion  identificador de la opcion
      * @return boolean        indica si se ha realizado o no el metodo 
      */
-    public function vota(int $id, int $idOpcion);
+    public function vota($id, $idOpcion);
 
     /**
      * Elimina voto de una opcion 
@@ -34,5 +34,6 @@ interface PropuestaInterface {
      * @param  int $idOpcion  identificador de la opcion
      * @return boolean        indica si se ha realizado o no el metodo
      */
-    public function eliminaVoto(int $id, int $idOpcion);
+    public function eliminaVoto($id, $idOpcion);
     
+}

@@ -21,6 +21,8 @@ class CreateInvitadosTable extends Migration {
 			$table->string('telefono', 15)->nullable();
 
 			$table->timestamps();
+
+			$table->unique('email');			
 		});			
 	}
 

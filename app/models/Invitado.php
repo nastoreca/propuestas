@@ -6,22 +6,17 @@ class Invitado extends Eloquent
 
 	public function promotores()
 	{
-		return $this->has_many_and_belongs_to('Promotor');
+		return $this->belongsToMany('Promotor', 'invitado_promotor','id_invitado', 'id_promotor');
 	}
 
 	public function propuestas()
 	{
-		return $this->has_many_and_belongs_to('Propuesta');
-	}
-
-	public function promotores()
-	{
-		return $this->has_many_and_belongs_to('Promotor');
+		return $this->belongsToMany('Propuesta', 'invitado_propuesta','id_invitado', 'id_propuesta');
 	}
 
 	public function opciones()
 	{
-		return $this->has_many_and_belongs_to('Opcion');
+		return $this->belongsToMany('Opcion', 'invitado_opcion','id_invitado', 'id_opcion');
 	}
 
 }
